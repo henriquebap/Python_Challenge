@@ -6,7 +6,7 @@ def option():
     Option = int(input())
     return Option
 
-def cad_bike():
+def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
     print("2 - Realizar uma vistoria de uma bike")
     print("3 - Visualizar o processo do seguro")
@@ -39,10 +39,10 @@ def cadastro_user():
         'email': email,
         'password': identification
     }
-    
-    list_first_nm = []
     return user
     
+def cad_bike():
+    pass 
 
 bikes =[]
 users = []
@@ -52,8 +52,8 @@ while True:
     if Option == 1:
         user = login(users)
         if user:
-            print(f"Seja Bem-vindo {user}")
-        inp_bike = cad_bike()
+            print(f"Seja Bem-vindo {user['first_name']}")
+        inp_bike = opt_bike()
         if inp_bike == 0: 
             break
         if inp_bike == 1:
