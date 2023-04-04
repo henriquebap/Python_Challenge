@@ -1,3 +1,4 @@
+import re
 def option():
     print("1 - Realizar o login")
     print("2 - Criar um cadastro")
@@ -15,7 +16,7 @@ def opt_bike():
     inp_bike = int(input())
     return inp_bike
 
-def login(users):#Trouble in verification section, it is passing through
+def login(users):
     id_mail = input("Digite o seu email: ")
     id_password = input("Digite a senha: ")
     for user in users:
@@ -26,7 +27,9 @@ def login(users):#Trouble in verification section, it is passing through
     
 def cadastro_user():
     first_name = input("Digite seu primeiro nome: ")
+    first_name = re.sub(r'[^a-z]','',first_name)
     last_name = input("Digite seu sobrenome: ")
+    last_name = re.sub(r'[^a-z]','',last_name)
     CPF = input("Digite o seu CPF: ")
     email = input("Digite o seu email: ")
     identification = input("Crie uma Senha: ")
@@ -54,15 +57,29 @@ def cad_bike():
     }
     return bike
 
+def survey_bike(bikes):
+### the idea here it's to give an option to open the camera and then the user will take pictures of the product(bike) or make a video of the bike
+#the type of pic is side, front, wheels, id and model.
+#the video needs show full body bike
+#has a limit time to make the survey
+#the user couldn't open the gallery and take old pictures of the bike
+#to verify this option we will probably use IA using deeplearning with TensorFlow Object Detection: Detection Models, but we need a big bike database
+    pass
+
+def list_user_bike(bikes_users):
+    print(bikes_users)
+
 bikes =[]
 users = []
+bikes_users = [bikes, users]
+bike_img = [] #database...
 
 while True:
     Option = option()
     if Option == 1:
         user = login(users)
         if user:
-            print(f"Seja Bem-vindo {user['first_name']}")
+            continue
         else:
             print("Nao foi encontrado o usuario")
             confirm = input("Gostaria de Criar um Usuario? (s/n)")
@@ -72,18 +89,22 @@ while True:
             else:
                 break
         print(f"Seja Bem-vindo {user['first_name']}, vamos continuar com o seu processo")
-        inp_bike = opt_bike()
-        if inp_bike == 0: 
-            break
-        if inp_bike == 1:
-            bike = cad_bike()
-            bikes.append(bike)
-        elif inp_bike == 2:
-            pass
-
+        
+        while True:
+            inp_bike = opt_bike()
+            if inp_bike == 0: 
+                break
+            if inp_bike == 1:
+                bike = cad_bike()
+                bikes.append(bike)
+            elif inp_bike == 2:
+                bike = survey_bike()
+                bike_img.append(bike)
     elif Option == 2:
         user = cadastro_user()
         users.append(user)
+    elif Option == 0:
+        break
     else:
         print("Digite uma opcao valida")
 
