@@ -44,11 +44,12 @@ def remove_user(users):
 
 def cadastro_user():
     first_name = input("Digite seu primeiro nome: ")
-    first_name = re.sub(r'[^a-z]','',first_name)
+    first_name = re.sub(r'[^a-z]','',first_name)#improve this
     last_name = input("Digite seu sobrenome: ")
     last_name = re.sub(r'[^a-z]','',last_name)
-    CPF = input("Digite o seu CPF: ")
+    CPF = input("Digite o seu CPF: ")#number treatment too
     email = input("Digite o seu email: ")
+    #we want make string treatment here. Just to remember
     identification = input("Crie uma Senha: ")
     user = {
         'first_name': first_name,
@@ -62,11 +63,11 @@ def cadastro_user():
     return user
     
 def cad_bike(user):
-    bike_name = input("Digite a marca da bike: ")
-    bike_model = input("Digite o modelo da bike (Ex: Montain, Street, Speed etc): ")
-    bike_id = input("Digite o Num de fabrica (Ex: 00000): ")
-    bike_year = input("Digite o ano de fabricacao da bike: ")
-    bike_value = input("Digite o valor da bike: ")
+    bike_name = input("Digite a marca da bike: ")#Inprove the accuracy with saving lot of bike brands
+    bike_model = input("Digite o modelo da bike (Ex: Montain, Street, Speed etc): ")#improve the input
+    bike_id = input("Digite o Num de fabrica (Ex: 00000): ")#verify the code with an API or bike data
+    bike_year = input("Digite o ano de fabricacao da bike: ")#improve the input
+    bike_value = input("Digite o valor da bike: ")#improve the input
     bike = {
         'bike_name': bike_name,
         'bike_model': bike_model,
@@ -170,13 +171,14 @@ def survey_bike(bikes):
     # return results
     return img_names, vid_name
 
-def list_user_bike(bikes_users):
+def list_user_bike(bikes_users):#need ideas to improve
     print(bikes_users)
 
+#improve all of these dictionarys
 bikes =[]
 users = []
-bikes_users = [bikes, users]
-bike_img = [] #database...
+bikes_users = [bikes, users]#for sure improve this
+bike_img = [] #database...?
 
 while True:
     Option = option()
