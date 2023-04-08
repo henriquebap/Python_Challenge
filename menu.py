@@ -2,6 +2,7 @@ import re
 def option():
     print("1 - Realizar o login")
     print("2 - Criar um cadastro")
+    print("3 - Remover um usuário cadastrado")
     print("0 - Sair")
 
     Option = int(input())
@@ -11,6 +12,7 @@ def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
     print("2 - Realizar uma vistoria de uma bike")
     print("3 - Visualizar o processo do seguro")
+    print("4 - Editar uma bike cadastrada")
     print("0 - Sair")
 
     inp_bike = int(input())
@@ -24,7 +26,16 @@ def login(users):
             return user
     print("A senha ou email estao incorretos")
     return None     
-    
+
+def remove_user(users):
+    email = input("Digite o email do usuário a ser removido: ")
+    for user in users:
+        if user['email'] == email:
+            users.remove(user)
+            print("Usuário removido com sucesso.")
+            return
+    print("O usuário não foi encontrado.")
+
 def cadastro_user():
     first_name = input("Digite seu primeiro nome: ")
     first_name = re.sub(r'[^a-z]','',first_name)
@@ -38,7 +49,8 @@ def cadastro_user():
         'last_name': last_name,
         'cpf': CPF,
         'email': email,
-        'password': identification
+        'password': identification,
+        'bikes': [] # initialize empty bikes list
     }
     return user
     
@@ -56,6 +68,28 @@ def cad_bike():
         'bike_value': bike_value
     }
     return bike
+
+def edit_bike(bikes):
+    bike_id = input("Digite o ID da bike que deseja editar: ")
+    for bike in bikes:
+        if bike['bike_id'] == bike_id:
+            print("Bike selecionada:")
+            print(bike)
+            new_name = input("Digite o novo nome da bike (Deixe em branco para manter o mesmo): ")
+            if new_name != "":
+                bike['bike_name'] = new_name
+            new_model = input("Digite o novo modelo da bike (Deixe em branco para manter o mesmo): ")
+            if new_model != "":
+                bike['bike_model'] = new_model
+            new_year = input("Digite o novo ano da bike (Deixe em branco para manter o mesmo): ")
+            if new_year != "":
+                bike['bike_year'] = new_year
+            new_value = input("Digite o novo valor da bike (Deixe em branco para manter o mesmo): ")
+            if new_value != "":
+                bike['bike_value'] = new_value
+            print("Bike atualizada com sucesso.")
+            return
+    print("Bike não encontrada.")
 
 def survey_bike(bikes):
 ### the idea here it's to give an option to open the camera and then the user will take pictures of the product(bike) or make a video of the bike
@@ -100,9 +134,19 @@ while True:
             elif inp_bike == 2:
                 bike = survey_bike()
                 bike_img.append(bike)
+            elif inp_bike == 3:
+                list_user_bike(bikes_users)
+            elif inp_bike == 4:
+                edit_bike(bikes)
+            elif inp_bike == 5:
+                remove_bike(bikes, user)
+            else:
+                print("Digite uma opcao valida")
     elif Option == 2:
         user = cadastro_user()
         users.append(user)
+    elif Option == 3:
+        remove_user(users)
     elif Option == 0:
         break
     else:
