@@ -13,6 +13,7 @@ def opt_bike():
     print("2 - Realizar uma vistoria de uma bike")
     print("3 - Visualizar o processo do seguro")
     print("4 - Editar uma bike cadastrada")
+    print("5 - Remover uma bike do cadsatro")
     print("0 - Sair")
 
     inp_bike = int(input())
@@ -90,6 +91,16 @@ def edit_bike(bikes):
             print("Bike atualizada com sucesso.")
             return
     print("Bike não encontrada.")
+
+def remove_bike(bikes, user):
+    bike_id = input("Digite o ID da bike que deseja remover: ")
+    for bike in bikes:
+        if bike['bike_id'] == bike_id and bike in user['bikes']:
+            user['bikes'].remove(bike)
+            bikes.remove(bike)
+            print("Bike removida com sucesso.")
+            return
+    print("Bike não encontrada ou não está cadastrada para este usuário.")
 
 def survey_bike(bikes):
 ### the idea here it's to give an option to open the camera and then the user will take pictures of the product(bike) or make a video of the bike
