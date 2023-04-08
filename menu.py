@@ -26,7 +26,7 @@ def login(users):
          if user['email'] == id_mail and user['password'] == id_password:
             return user
     print("A senha ou email estao incorretos")
-    return None     
+    return None
 
 def remove_user(users):
     email = input("Digite o email do usuário a ser removido: ")
@@ -53,6 +53,7 @@ def cadastro_user():
         'password': identification,
         'bikes': [] # initialize empty bikes list
     }
+    users.append(user)
     return user
     
 def cad_bike():
@@ -68,6 +69,7 @@ def cad_bike():
         'bike_year': bike_year,
         'bike_value': bike_value
     }
+    user['bikes'].append(bike) #add bike to user's bike list
     return bike
 
 def edit_bike(bikes):
@@ -124,37 +126,37 @@ while True:
     if Option == 1:
         user = login(users)
         if user:
-            continue
+            print(f"Seja Bem-vindo {user['first_name']}, vamos continuar com o seu processo")
+            while True:
+                inp_bike = opt_bike()
+                if inp_bike == 0: 
+                    break
+                if inp_bike == 1:
+                    bike = cad_bike(user) #adding a bike to user's bike list
+                    bikes.append(bike)
+                elif inp_bike == 2:
+                    bike = survey_bike()
+                    bike_img.append(bike)
+                elif inp_bike == 3:
+                    list_user_bike(bikes_users)
+                elif inp_bike == 4:
+                    edit_bike(bikes)
+                elif inp_bike == 5:
+                    remove_bike(bikes, user)
+                else:
+                    print("Digite uma opcao valida")
         else:
             print("Nao foi encontrado o usuario")
             confirm = input("Gostaria de Criar um Usuario? (s/n)")
-            if confirm == "s":
+            if confirm.lower() == "s":
                 user = cadastro_user()
+                print("Usuario Cadastrado com sucesso")
                 users.append(user)
             else:
                 break
-        print(f"Seja Bem-vindo {user['first_name']}, vamos continuar com o seu processo")
-        
-        while True:
-            inp_bike = opt_bike()
-            if inp_bike == 0: 
-                break
-            if inp_bike == 1:
-                bike = cad_bike()
-                bikes.append(bike)
-            elif inp_bike == 2:
-                bike = survey_bike()
-                bike_img.append(bike)
-            elif inp_bike == 3:
-                list_user_bike(bikes_users)
-            elif inp_bike == 4:
-                edit_bike(bikes)
-            elif inp_bike == 5:
-                remove_bike(bikes, user)
-            else:
-                print("Digite uma opcao valida")
     elif Option == 2:
         user = cadastro_user()
+        print("Usuario cadastrado com sucesso")
         users.append(user)
     elif Option == 3:
         remove_user(users)
