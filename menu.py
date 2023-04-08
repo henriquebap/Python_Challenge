@@ -1,4 +1,9 @@
 import re
+import cv2
+#if you get the "ModuleNotFoundError, he suggests that the module cv2 is not installed in your Python enviroment, so to fix that you need install cv2 using pip command"
+#You can run this pip install opencv-python-headless at the terminal or command prompt to install cv2
+
+
 def option():
     print("1 - Realizar o login")
     print("2 - Criar um cadastro")
@@ -10,7 +15,7 @@ def option():
 
 def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
-    print("2 - Realizar uma vistoria de uma bike")
+    print("2 - Realizar uma vistoria de uma bike - (Not ready)")
     print("3 - Visualizar o processo do seguro")
     print("4 - Editar uma bike cadastrada")
     print("5 - Remover uma bike do cadsatro")
@@ -56,7 +61,7 @@ def cadastro_user():
     users.append(user)
     return user
     
-def cad_bike():
+def cad_bike(user):
     bike_name = input("Digite a marca da bike: ")
     bike_model = input("Digite o modelo da bike (Ex: Montain, Street, Speed etc): ")
     bike_id = input("Digite o Num de fabrica (Ex: 00000): ")
@@ -111,7 +116,59 @@ def survey_bike(bikes):
 #has a limit time to make the survey
 #the user couldn't open the gallery and take old pictures of the bike
 #to verify this option we will probably use IA using deeplearning with TensorFlow Object Detection: Detection Models, but we need a big bike database
-    pass
+    # define image and video capture objects
+    #This is a prototype of what we what to include
+    cap = cv2.VideoCapture(0) # use the default camera
+    img_counter = 0
+    vid_counter = 0
+
+    # define maximum survey time
+    survey_time = 60 # in seconds
+
+    # initialize image and video names
+    img_names = ['side', 'front', 'wheels', 'id', 'model']
+    vid_name = 'full_body'
+
+    # loop until maximum survey time is reached
+    start_time = cv2.getTickCount()
+    while True:
+        # check if survey time is exceeded
+        current_time = cv2.getTickCount()
+        if (current_time - start_time) / cv2.getTickFrequency() > survey_time:
+            break
+
+        # read image from camera
+        ret, frame = cap.read()
+
+        # display image
+        cv2.imshow('frame', frame)
+
+        # check for keypresses
+        k = cv2.waitKey(1)
+        if k == 27: # ESC key to exit
+            break
+        elif k == 32: # space key to capture image
+            if img_counter < len(img_names):
+                img_name = '{}.jpg'.format(img_names[img_counter])
+                cv2.imwrite(img_name, frame)
+                img_counter += 1
+        elif k == ord('v'): # 'v' key to start recording video
+            vid_name = 'full_body.avi'
+            fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            out = cv2.VideoWriter(vid_name, fourcc, 20.0, (640, 480))
+        elif k == ord('r'): # 'r' key to stop recording video
+            out.release()
+            vid_counter += 1
+
+    # release image and video capture objects
+    cap.release()
+    cv2.destroyAllWindows()
+
+    # run object detection on captured images
+    # use TensorFlow Object Detection API
+
+    # return results
+    return img_names, vid_name
 
 def list_user_bike(bikes_users):
     print(bikes_users)
@@ -135,7 +192,7 @@ while True:
                     bike = cad_bike(user) #adding a bike to user's bike list
                     bikes.append(bike)
                 elif inp_bike == 2:
-                    bike = survey_bike()
+                    bike = survey_bike(bikes)
                     bike_img.append(bike)
                 elif inp_bike == 3:
                     list_user_bike(bikes_users)
