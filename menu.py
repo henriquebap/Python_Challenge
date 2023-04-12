@@ -150,11 +150,12 @@ def survey_bike(bikes):
             break
         elif k == 32: # space key to capture image
             if img_counter < len(img_names):
-                img_name = '{}.jpg'.format(img_names[img_counter])
+                img_name = 'imgtaken/{}.jpg'.format(img_names[img_counter])
                 cv2.imwrite(img_name, frame)
+                img_names.append(img_name)
                 img_counter += 1
         elif k == ord('v'): # 'v' key to start recording video
-            vid_name = 'full_body.avi'
+            vid_name = 'videotaken/full_body.avi'
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
             out = cv2.VideoWriter(vid_name, fourcc, 20.0, (640, 480))
         elif k == ord('r'): # 'r' key to stop recording video
