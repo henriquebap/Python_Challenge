@@ -1,9 +1,9 @@
 import cv2
 #if you get the "ModuleNotFoundError, he suggests that the module cv2 is not installed in your Python enviroment, so to fix that you need install cv2 using pip command"
 #You can run this pip install opencv-python-headless at the terminal or command prompt to install cv2
-from Options.option import option, opt_bike
-from user.user import login, remove_user, cadastro_user
-from bike.bike import cad_bike, edit_bike, remove_bike, list_user_bike
+from option import option, opt_bike
+from user import login, remove_user, cadastro_user
+from bike import cad_bike, edit_bike, remove_bike, list_user_bike
 
 #improve all of these dictionarys
 bikes =[]
@@ -34,8 +34,6 @@ while True:
                     edit_bike(bikes)
                 elif inp_bike == 5:
                     remove_bike(bikes, user)
-                else:
-                    print("Digite uma opcao valida")
         else:
             print("Nao foi encontrado o usuario")
             confirm = input("Gostaria de Criar um Usuario? (s/n)")
@@ -44,7 +42,7 @@ while True:
                 print("Usuario Cadastrado com sucesso")
                 users.append(user)
             else:
-                break
+                continue
     elif Option == 2:
         user = cadastro_user()
         print("Usuario cadastrado com sucesso")
@@ -53,7 +51,4 @@ while True:
         remove_user(users)
     elif Option == 0:
         break
-    else:
-        print("Digite uma opcao valida")
-
     

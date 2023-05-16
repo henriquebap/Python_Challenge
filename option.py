@@ -3,10 +3,13 @@ def option():
     print("2 - Criar um cadastro")
     print("3 - Remover um usuário cadastrado")
     print("0 - Sair")
-
-    Option = int(input())
-    return Option
-
+    try:
+        Option = int(input())
+        return Option
+    except ValueError:
+        print("Porfavor digite um opcao com o numero")
+    except:
+        print("Digite uma opcao valida")
 def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
     print("2 - Realizar uma vistoria de uma bike - (Not ready)")
@@ -14,6 +17,14 @@ def opt_bike():
     print("4 - Editar uma bike cadastrada")
     print("5 - Remover uma bike do cadsatro")
     print("0 - Sair")
+    try:
+        inp_bike = int(input())
+        return inp_bike
+    except ValueError:
+        print("Digite um valor valido para a opcao")
+    except:
+        print("Digite uma opcao valida")
 
-    inp_bike = int(input())
-    return inp_bike
+
+def try_and_except():
+    pass
