@@ -8,15 +8,18 @@ from bike import cad_bike, edit_bike, remove_bike, list_user_bike
 #improve all of these dictionarys
 bikes =[]
 users = []
-bikes_users = [bikes, users]#for sure improve this
-bike_img = [] #database...?
+#bike_img = [] #database...?
 
 while True:
-    Option = option()
+    try:
+        Option = option()
+    except ValueError:
+        print("Opcai Invalida. Por favor, digite um numero valido.")
+        continue
     if Option == 1:
         user = login(users)
         if user:
-            print(f"Seja Bem-vindo {user['first_name']}, vamos continuar com o seu processo")
+            print(f"Seja Bem-vindo {user.first_name}, vamos continuar com o seu processo")
             while True:
                 inp_bike = opt_bike()
                 if inp_bike == 0: 
@@ -29,22 +32,25 @@ while True:
                     #bike = survey_bike(bikes)
                     #bike_img.append(bike)
                 elif inp_bike == 3:
-                    list_user_bike(bikes_users)
+                    list_user_bike(user)
                 elif inp_bike == 4:
-                    edit_bike(bikes)
+                    edit_bike(user.bikes)
                 elif inp_bike == 5:
                     remove_bike(bikes, user)
         else:
             print("Nao foi encontrado o usuario")
             confirm = input("Gostaria de Criar um Usuario? (s/n)")
+            while confirm.lower() not in ["s", "n"]:
+                print("Por favor, digite 's' para Sim ou 'n' para Não.")
+                confirm = input("Gostaria de criar um usuário? (s/n)")
             if confirm.lower() == "s":
-                user = cadastro_user()
-                print("Usuario Cadastrado com sucesso")
+                user = cadastro_user(users)
+                print("Usuário cadastrado com sucesso.")
                 users.append(user)
             else:
                 continue
     elif Option == 2:
-        user = cadastro_user()
+        user = cadastro_user(users)
         print("Usuario cadastrado com sucesso")
         users.append(user)
     elif Option == 3:

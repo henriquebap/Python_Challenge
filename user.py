@@ -1,50 +1,69 @@
 import re
 from passlib.hash import bcrypt
 
-users = []
+class User:
+    def __init__(self, first_name, last_name, cpf, email, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.cpf = cpf
+        self.email = email
+        self.password = password
+        self.bikes = []
+
+
+    users = []
+
+    def hash_password(self):
+        self.password = bcrypt.hash(self.password)
+        
+    def verify_password(self, password):
+        return bcrypt.verify(password, self.password)
 
 def login(users):
     id_mail = input("Digite o seu email: ")
     id_password = input("Digite a senha: ")
     for user in users:
-         if user['email'] == id_mail and user['password'] == id_password:
+         if user.email == id_mail and user.verify_password(id_password):
             return user
     print("A senha ou email estao incorretos")
     return None
 
-def remove_user(users):
-    email = input("Digite o email do usuário a ser removido: ")#PEdir senha para remover
+def remove_user(users):#testar fun
+    email = input("Digite o email do usuário a ser removido: ")
+    id_password = input("Digite a Senha do usuario: ")
     for user in users:
-        if user['email'] == email:
+        if user.email == email and user.verify_password(id_password):
             users.remove(user)
             print("Usuário removido com sucesso.")
             return
     print("O usuário não foi encontrado.")
 
-def hash_id(id_password):
-    hashed_id = bcrypt.hash(id_password)
-    return hashed_id
-def verify_id(id_password, hashed_id):
-    return bcrypt.verify(id_password, hashed_id)
-    
-
-def cadastro_user():
-    first_name = input("Digite seu primeiro nome: ")
-    first_name = re.sub(r'[^a-z]','',first_name)#improve this
-    first_name = str(first_name)
-    last_name = input("Digite seu sobrenome: ")
-    last_name = re.sub(r'[^a-z]','',last_name)
-    last_name = str(last_name)
+def cadastro_user(users):
     while True:
-        CPF = input("Digite o seu CPF: ")
-        CPF.isalpha
-        CPF = re.sub('[^0-9]', '', CPF)
-        if len(CPF) != 11:#testar cpf len
+        first_name = input("Digite seu primeiro nome: ")
+        if not first_name.isalpha():
+            print("Por favor, digite apenas letras.")
+            continue
+        first_name = re.sub(r'[^a-zA-Z]', '', first_name)
+        break
+
+    while True:
+        last_name = input("Digite seu sobrenome: ")
+        if not last_name.isalpha():
+            print("Por favor, digite apenas letras.")
+            continue
+        last_name = re.sub(r'[^a-zA-Z]', '', last_name)
+        break
+
+    while True:
+        cpf = input("Digite o seu CPF: ")
+        if not cpf.isdigit() or len(cpf) != 11:
             print("CPF inválido. Verifique a quantidade de dígitos.")
             continue
-            #cpf_formatado = f"{CPF[:3]}.{CPF[3:6]}.{CPF[6:9]}-{CPF[9:]}"      
         else:
+            cpf_formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             break
+
     while True:
         email = input("Digite o seu email: ").lower()#testar o re
         padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
@@ -56,24 +75,13 @@ def cadastro_user():
 
     while True:
         id_password = input("Crie uma Senha: ")
-
-        hashed_id = hash_id(id_password)
         id_input = input("Digite a sua senha novamente para verificar: ")
-        id_match = verify_id(id_input, hashed_id)
-        if id_match:
-            print("Senha Salva com sucesso")
-            break
-        else:
-            print("Senha Incorreta")
+        if id_password != id_input:
+            print("As senhas não correspondem. Tente novamente.")
             continue
-        
-    user = { #Melhorar a saida do discionario
-        'first_name': first_name,
-        'last_name': last_name,
-        'cpf': CPF,
-        'email': email,
-        'password': id_password,
-        'bikes': [] # initialize empty bikes list
-    }
-    users.append(user)
-    return user
+
+        user = User(first_name, last_name, cpf, email, id_password)
+        user.hash_password()
+        users.append(user)
+        print("Usuário cadastrado com sucesso.")
+        return user
