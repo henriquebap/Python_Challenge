@@ -10,12 +10,13 @@ def option():
         print("Porfavor digite um opcao com o numero")
     except:
         print("Digite uma opcao valida")
+
 def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
     print("2 - Realizar uma vistoria de uma bike - (Not ready)")
     print("3 - Visualizar o processo do seguro")
     print("4 - Editar uma bike cadastrada")
-    print("5 - Remover uma bike do cadsatro")
+    print("5 - Remover uma bike do cadastro")
     print("0 - Sair")
     try:
         inp_bike = int(input())

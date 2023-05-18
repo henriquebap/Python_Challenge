@@ -51,4 +51,5 @@ while True:
         remove_user(users)
     elif Option == 0:
         break
-    
+    else:
+        print("Digite um numero funcional")

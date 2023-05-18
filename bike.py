@@ -1,5 +1,5 @@
 
-def cad_bike(user):
+def cad_bike(user):#Melhorar as excecoes
     bike_name = input("Digite a marca da bike: ")#Inprove the accuracy with saving lot of bike brands
     bike_model = input("Digite o modelo da bike (Ex: Montain, Street, Speed etc): ")#improve the input
     bike_id = input("Digite o Num de fabrica (Ex: 00000): ")#verify the code with an API or bike data
