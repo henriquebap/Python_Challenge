@@ -13,10 +13,9 @@ def option():
 
 def opt_bike():
     print("1 - Cadastrar uma bike no seguro")
-    print("2 - Realizar uma vistoria de uma bike - (Not ready)")
-    print("3 - Visualizar o processo do seguro")
-    print("4 - Editar uma bike cadastrada")
-    print("5 - Remover uma bike do cadastro")
+    print("2 - Visualizar o processo do seguro")
+    print("3 - Editar uma bike cadastrada")
+    print("4 - Remover uma bike do cadastro")
     print("0 - Sair")
     try:
         inp_bike = int(input())

@@ -1,6 +1,6 @@
 import re
-from passlib.hash import bcrypt
-
+from passlib.hash import bcrypt #importando a biblioteca passlib usando o hash para verificar a senha
+#Criando class user e passando todos os atributos que um user tem
 class User:
     def __init__(self, first_name, last_name, cpf, email, password):
         self.first_name = first_name
@@ -10,25 +10,26 @@ class User:
         self.password = password
         self.bikes = []
 
-
+#criando lista de users
     users = []
 
+#funcao hash_password para salvar a 
     def hash_password(self):
         self.password = bcrypt.hash(self.password)
-        
+#funcao de verificacao da senha usando bcrypt
     def verify_password(self, password):
         return bcrypt.verify(password, self.password)
-
+#funcao que apos criar o user ele consegue fazer o login validando o email e a senha criada do ususario
 def login(users):
     id_mail = input("Digite o seu email: ")
     id_password = input("Digite a senha: ")
     for user in users:
-         if user.email == id_mail and user.verify_password(id_password):
+         if user.email == id_mail and user.verify_password(id_password): # faz a validacao
             return user
     print("A senha ou email estao incorretos")
     return None
 
-def remove_user(users):#testar fun
+def remove_user(users): #remove o ususario, com a entrada pedindo email e senha para excluir o usuario
     email = input("Digite o email do usuário a ser removido: ")
     id_password = input("Digite a Senha do usuario: ")
     for user in users:
@@ -39,7 +40,7 @@ def remove_user(users):#testar fun
     print("O usuário não foi encontrado.")
 
 def cadastro_user(users):
-    while True:
+    while True: #arumar o erro se eu colocar um espaco ele da um erro, nao queria que desse um erro somente colocando espaco. vou verificar o que e possivel de se fazer
         first_name = input("Digite seu primeiro nome: ")
         if not first_name.isalpha():
             print("Por favor, digite apenas letras.")
