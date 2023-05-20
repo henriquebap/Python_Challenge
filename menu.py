@@ -37,7 +37,7 @@ while True:
                 elif inp_bike == 3:
                     edit_bikes(user.bikes)#Modifica entradas que foram digitadas errado e adiciona itens (modificacoes + valor da modificao)
                 elif inp_bike == 4:#Remove a bike do perfil do ususario
-                    remove_bike(bikes)
+                    remove_bike(bikes, user)
         else:
             print("Nao foi encontrado o usuario") #Se o ususario colocado na entrada nao estiver cadastrado ele retona uma mensagem
             confirm = input("Gostaria de Criar um Usuario? (s/n)")

@@ -150,7 +150,7 @@ def edit_bikes(bikes):
             if new_bike_year > 2023:
                 print("Por favor, digite um ano valido ate 2023")
                 continue
-            bike.bike_year = new_bike_year
+            bike.year = new_bike_year  # Adicione esta linha para atualizar o ano da bike
         elif choice == 4:
             total_additional_modifications = 0  # Inicialize total_additional_modifications fora do loop while
             while True:
@@ -166,18 +166,27 @@ def edit_bikes(bikes):
                     except ValueError:
                         print("Valor inválido. Digite um valor numérico válido.")
             bike.value += total_additional_modifications
-            break
         elif choice == 0:
             return
-def remove_bike(bikes):
+def remove_bike(bikes, user):
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
-    for bike in bikes:
-        if bike.serial_number == bike_serial_number:
-            bikes.remove(bike)
-            print("Bike removida com sucesso!")
-            return
-    print("Bike não encontrada!")
 
+    found_bike = None
+    for index, bike in enumerate(bikes):
+        if bike.serial_number == bike_serial_number and bike in user.bikes:
+            found_bike = bike
+            break
+
+    if found_bike is None:
+        print("Bike não encontrada ou não pertence ao usuário.")
+        return
+
+    bikes.pop(index)
+    user.bikes.remove(found_bike)
+
+    print("Bike removida com sucesso.")
+
+    print("Bike removida com sucesso.")
 def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
         print("----"*10)
         print(f"Ola {user.first_name} Aqui esta as suas bicicletas cadastradas")
