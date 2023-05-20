@@ -173,7 +173,7 @@ def remove_bike(bikes, user):
 
     found_bike = None
     for index, bike in enumerate(bikes):
-        if bike.serial_number == bike_serial_number and bike in user.bikes:
+        if bike.bike.serial_number == bike_serial_number and bike in user.bikes:
             found_bike = bike
             break
 
@@ -183,8 +183,6 @@ def remove_bike(bikes, user):
 
     bikes.pop(index)
     user.bikes.remove(found_bike)
-
-    print("Bike removida com sucesso.")
 
     print("Bike removida com sucesso.")
 def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
