@@ -1,7 +1,7 @@
 #Imports necessary imports
 from option import option, opt_bike
 from user import login, remove_user, cadastro_user
-from bike import cad_bike, edit_bike, remove_bike, list_user_bike
+from bike import cad_bike, edit_bikes, remove_bike, list_user_bike
 
 #improve all of these dictionarys
 bikes =[]
@@ -35,9 +35,9 @@ while True:
                 elif inp_bike == 2:
                     list_user_bike(user)#Mostra bikes atreladas ao perfil logado
                 elif inp_bike == 3:
-                    edit_bike(user.bikes)#Modifica entradas que foram digitadas errado e adiciona itens (modificacoes + valor da modificao)
+                    edit_bikes(user.bikes)#Modifica entradas que foram digitadas errado e adiciona itens (modificacoes + valor da modificao)
                 elif inp_bike == 4:#Remove a bike do perfil do ususario
-                    remove_bike(bikes, user)
+                    remove_bike(user, bikes)
         else:
             print("Nao foi encontrado o usuario") #Se o ususario colocado na entrada nao estiver cadastrado ele retona uma mensagem
             confirm = input("Gostaria de Criar um Usuario? (s/n)")
@@ -52,7 +52,6 @@ while True:
                 continue
     elif Option == 2: #Input 2 chama a funcao cadastro dentro dessa condicao
         user = cadastro_user(users)
-        print("Usuario cadastrado com sucesso")
         users.append(user) #atrela user dentro da lista users
     elif Option == 3: 
         remove_user(users) #condicao do input 3 chama a funcao remover usuario 

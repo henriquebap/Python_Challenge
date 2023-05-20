@@ -1,7 +1,7 @@
 #Importa o modulo "re"
 import re
 #modulo datetime
-import datetime
+from datetime import datetime
 #from user import cadastro_user
 #Classe bike que cria objeto Bike com todos os atributos de uma bike
 class Bike:
@@ -12,6 +12,8 @@ class Bike:
         self.year = year
         self.value = value
         self.additional_modifications = additional_modifications or []
+
+    bikes =[]
 
     #STR permite que o print(bike) retorne uma mensagem certa, mostrando os atributos de uma bike
     def __str__(self):
@@ -34,19 +36,18 @@ bike_types = [mountain_bike_type, road_bike_type, bmx_bike_type, folding_bike_ty
 
 #funcao para cadastrar a bike em um user
 def cad_bike(user):
-    #Laco de repeticao
     while True:
-        bike_brand = input("Digite a marca da bike: ")
-        if not bike_brand.isalpha(): #validacao se a entrada foi de numeros
+        bike_brand = input("Digite a marca da bike: ").strip(" #@!$%^&*")
+        if not bike_brand.isalpha(): #validacao se a entrada foi de String
             print("Por favor, digite o nome da marca com somente letras.")
             continue
-        bike_brand = re.sub(r'[^a-zA-Z]', '', bike_brand) #Tira toda a sujeita do input
+        bike_brand = re.sub(r'[^a-zA-Z]', '', bike_brand) #Se sobrar alguma sujeira e limpado aqui
         break
     while True:
         print("Tipos de bike disponíveis:")
-        for bike_type in bike_types: #Para todas os tipos de bike no tipo de bike mostrar todos os nomes
+        for bike_type in bike_types: #Para todos os tipos de bike no BikeType mostra todos os nomes
             print(bike_type.name)
-        bike_type_input = input("Digite o tipo da bike: ")
+        bike_type_input = input("Digite o tipo da bike: ").strip(" #@!$%^&*")
         if not any(bike_type_input.lower() == bike_type.name.lower() for bike_type in bike_types): #Se a entrada do ususario nao for nenhuma opcao dada, retorna erro
             print("Por favor, Digite um tipo de bike Valido.")
             continue
@@ -70,9 +71,9 @@ def cad_bike(user):
     while True:
         bike_value = input("Digite o valor da bike: ")
         try:
-            bike_value = float(bike_value) #Validacao se a entrada foi um numero mesmo
+            bike_value = float(bike_value) #Transforma a entrada em float
             break
-        except ValueError:
+        except ValueError: #Valida se a entrada e um numero e senao for retorna um value error
             print("Por favor, digite um valor numerico valido")
 
     bike = Bike(bike_brand, bike_type, bike_id, bike_year, bike_value, additional_modifications=0) #Depois de todas as entradas ele atribui a Bike cada valor
@@ -80,78 +81,97 @@ def cad_bike(user):
     print("Bike Cadastrada com sucesso") 
     return user
 #Funcao de editar as bikes 
-def edit_bike(bikes):
-    bike_id = input("Digite o ID da bike que deseja editar: ")
-    for bike in bikes:
-        if bike.serial_number == bike_id: #se a entrada do usuario for de acordo com um Numero de serie de uma bike existente ele continua
-            print("Bike selecionada:")
-            print(bike) #Mostra a bike puxando o __STR__
+def edit_bikes(bikes):
+    bike_serial_number = input("Digite o ID da bike que deseja editar: ")
+    bike = None  # Inicialize a variável bike fora do loop for
+    for b in bikes:
+        if b.serial_number == bike_serial_number:
+            bike = b
+            print(f"Bike Selecionada: {bike}")
             total_additional_modifications = 0
+
+    if bike is None:
+        print("Bike nao encontrada!")
+        return
+
+    while True:
+        print("---" * 40)
+        print("O que voce deseja editar?")
+        print("1. Marca")
+        print("2. Modelo")
+        print("3. Ano")
+        print("4. Adicionar uma nova modificacao")
+        print("0. Voltar ao bike menu")
+
+        try:
+            choice = int(input("Digite o numero correspondente a opcao desejada: "))
+        except ValueError:
+            print("Por favor, digite um numero correspondente a opcao")
+            continue
+
+        if choice == 1:
+            print(f'O nome da sua marca da sua bike atualmente e {bike.brand}')
+            while True:
+                new_brand = input("Digite a nova marca: ")
+                if not new_brand.isalpha():
+                    print("Por favor, digite o nome da marca com somente letras.")
+                    continue
+                new_brand = re.sub(r'[^a-zA-Z]', '', new_brand)
+                bike.brand = new_brand
+                break
+        elif choice == 2:
+            print("Tipos de bike disponíveis:")
+            for bike_type in bike_types:
+                print(bike_type.name)
+            print("---" * 40)
+            print(f"O Tipo atual da sua bike e {bike.bike_type.name}")
+            while True:
+                new_type = input("Digite o novo tipo da bike: ").strip()
+                if not any(new_type.lower() == bike_type.name.lower() for bike_type in bike_types):
+                    print("Por favor, Digite um tipo de bike Valido.")
+                    continue
+                bike.bike_type.name = new_type
+                break
+        elif choice == 3:
+            new_bike_year = input("Digite o ano correto da bike: ")
+            if not new_bike_year.isdigit() or len(new_bike_year) != 4:
+                print("Por favor, digite os 4 digitos do ano da bike.")
+                continue
+            new_bike_year = int(new_bike_year)
+            if new_bike_year > 2023:
+                print("Por favor, digite um ano valido ate 2023")
+                continue
+            bike.bike_year = new_bike_year
+        elif choice == 4:
+            total_additional_modifications = 0  # Inicialize total_additional_modifications fora do loop while
             while True:
                 additional_modification = input("Digite uma modificação adicional para a bike (Deixe em branco para sair): ")
                 if additional_modification == "":
                     break
                 else:
                     modification_value = input("Digite o valor da modificação adicional: ")
-                    try: #Valida o numero de input e adiciona ao valor inicial
+                    try:
                         modification_value = float(modification_value)
-                        total_additional_modifications += modification_value #a cada modificacao com valor atribuido ele soma e deixa no valor total
+                        total_additional_modifications += modification_value
                         bike.additional_modifications.append(f"{additional_modification} + {modification_value} reais")
                     except ValueError:
                         print("Valor inválido. Digite um valor numérico válido.")
-            bike.value += total_additional_modifications #Finaliza somando o valor total de modificacao + O valor inicial 
-            print("---"*40)
-            print(f'O nome da sua marca da sua bike atualmente e {bike.brand}')
-            new_name = input("Digite o nome da marca corretamente(Deixe em branco para manter o mesmo): ")
-            if new_name != "": #condicional se ele deixar vazio ele continua com o mesmo valor inicial
-                break
-            if not new_name.isalpha():
-                print("Por favor, digite o nome somente com letras")
-            else:
-                bike.brand = new_name
-                #verificar o erro de loop infinito nao deixando o vazio ser uma opcao de entrada
-            while True:
-                print("Tipos de bike disponíveis:")
-                for bike_type in bike_types:
-                    print(bike_type.name)
-                print("---"*40)
-                print(f"O Tipo atual da sua bike e {bike.bike_type.name}")
-                new_type = input("Corriga o Tipo de bike (Deixe em branco para manter o mesmo): ")
-                if new_type != "":
-                    break
-                elif not any(new_type.lower() == bike_type.name.lower() for bike_type in bike_types):
-                    print("Por favor, Digite um tipo de bike Valido.")
-                    continue    
-                bike.bike_type = new_type
-                break
-            f'\n'
-            print("---"*40)
-            print(f"O ano atual da sua bike e {bike.year}")
-            new_year = input("Corriga o Ano da sua bike (Deixe em branco para manter o mesmo): ")
-            if new_year != "":
-                if not new_year.isdigit() or len(new_year) != 4:
-                    print("Ano inválido. Digite um ano válido com 4 dígitos.")
-                    continue
-                current_year = datetime.now().year
-                if int(new_year) > current_year:
-                    print("Ano inválido. Digite um ano igual ou anterior ao ano atual.")
-                    continue
-                bike.year = new_year
-            print("Bike atualizada com sucesso.")
+            bike.value += total_additional_modifications
+            break
+        elif choice == 0:
             return
-
-    print("Bike não encontrada.")
-
-def remove_bike(bikes, user):# Precisa de Tratamento de excecao
-    bike_id = input("Digite o ID da bike que deseja remover: ")
+def remove_bike(user, bikes):
+    bike_serial_number = input("Digite o ID da bike que deseja remover: ")
     for bike in bikes:
-        #Verificar o erro de excluir
-        if bike.serial_number == bike_id and bike in user.bikes: #se o serial number do input for valido com alguma bike criada e salva em user ele apaga a bike
-            user.bikes.remove(bike)
-            bikes.remove(bike)
-            print("Bike removida com sucesso.")
+        if bike.serial_number == bike_serial_number:
+            if bike in user.bikes:
+                user.bikes.remove(bike)
+                bikes.remove(bike)
+                print("Bike removida com sucesso!")
+            else:
+                print("A bike não está associada a este usuário.")
             return
-    print("Bike não encontrada ou não está cadastrada para este usuário.")
+    print("Bike não encontrada!")
 
 def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
         print("----"*10)
