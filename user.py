@@ -13,7 +13,7 @@ class User:
 #criando lista de users
     users = []
 
-#funcao hash_password para salvar a 
+#funcao hash_password para salvar a password + hash
     def hash_password(self):
         self.password = bcrypt.hash(self.password)
 #funcao de verificacao da senha usando bcrypt
@@ -21,7 +21,7 @@ class User:
         return bcrypt.verify(password, self.password)
 #funcao que apos criar o user ele consegue fazer o login validando o email e a senha criada do ususario
 def login(users):
-    id_mail = input("Digite o seu email: ")
+    id_mail = input("Digite o seu email: ").lower()
     id_password = input("Digite a senha: ")
     for user in users:
          if user.email == id_mail and user.verify_password(id_password): # faz a validacao
@@ -30,7 +30,7 @@ def login(users):
     return None
 
 def remove_user(users): #remove o ususario, com a entrada pedindo email e senha para excluir o usuario
-    email = input("Digite o email do usuário a ser removido: ")
+    email = input("Digite o email do usuário a ser removido: ").lower()
     id_password = input("Digite a Senha do usuario: ")
     for user in users:
         if user.email == email and user.verify_password(id_password):
@@ -41,7 +41,7 @@ def remove_user(users): #remove o ususario, com a entrada pedindo email e senha 
 
 def cadastro_user(users):
     while True: #arumar o erro se eu colocar um espaco ele da um erro, nao queria que desse um erro somente colocando espaco. vou verificar o que e possivel de se fazer
-        first_name = input("Digite seu primeiro nome: ")
+        first_name = input("Digite seu primeiro nome: ").strip(" #@!$%^&*")
         if not first_name.isalpha():
             print("Por favor, digite apenas letras.")
             continue
@@ -49,7 +49,7 @@ def cadastro_user(users):
         break
 
     while True:
-        last_name = input("Digite seu sobrenome: ")
+        last_name = input("Digite seu sobrenome: ").strip(" #@!$%^&*")
         if not last_name.isalpha():
             print("Por favor, digite apenas letras.")
             continue
@@ -57,7 +57,7 @@ def cadastro_user(users):
         break
 
     while True:
-        cpf = input("Digite o seu CPF: ")
+        cpf = input("Digite o seu CPF: ").strip(" #@!$%^&*")
         if not cpf.isdigit() or len(cpf) != 11:
             print("CPF inválido. Verifique a quantidade de dígitos.")
             continue
@@ -66,7 +66,7 @@ def cadastro_user(users):
             break
 
     while True:
-        email = input("Digite o seu email: ").lower()#testar o re
+        email = input("Digite o seu email: ").lower().strip(" #@!$%^&*")#testar o re
         padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
         if not re.match(padrao, email):
             print("Porfavor verifique o formato do seu email")
