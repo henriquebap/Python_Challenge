@@ -61,3 +61,14 @@ def edit_bike(bikes):
             return
 
     print("Bike não encontrada.")
+
+
+while True:
+        print("Tipos de bike disponíveis:")
+        for bike_type in bike_types: #Para todos os tipos de bike no BikeType mostra todos os nomes
+            print(bike_type.name)
+        bike_type_input = input("Digite o tipo da bike: ").strip(" #@!$%^&*")
+        if not any(bike_type_input.lower() == bike_type.name.lower() for bike_type in bike_types): #Se a entrada do ususario nao for nenhuma opcao dada, retorna erro
+            print("Por favor, Digite um tipo de bike Valido.")
+            continue
+        break

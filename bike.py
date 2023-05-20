@@ -45,12 +45,21 @@ def cad_bike(user):
         break
     while True:
         print("Tipos de bike disponíveis:")
-        for bike_type in bike_types: #Para todos os tipos de bike no BikeType mostra todos os nomes
+        for bike_type in bike_types:
             print(bike_type.name)
-        bike_type_input = input("Digite o tipo da bike: ").strip(" #@!$%^&*")
-        if not any(bike_type_input.lower() == bike_type.name.lower() for bike_type in bike_types): #Se a entrada do ususario nao for nenhuma opcao dada, retorna erro
-            print("Por favor, Digite um tipo de bike Valido.")
+            
+        bike_type_input = input("Digite o tipo da bike: ").strip().lower()
+        valid_bike_type = False
+        
+        for bike_type in bike_types:
+            if bike_type_input == bike_type.name.lower():
+                valid_bike_type = True
+                break
+        
+        if not valid_bike_type:
+            print("Por favor, digite um tipo de bike válido.")
             continue
+        
         break
     while True:
         bike_id = input("Digite o Num de serie (Ex: 00000): ") 
@@ -160,16 +169,12 @@ def edit_bikes(bikes):
             break
         elif choice == 0:
             return
-def remove_bike(user, bikes):
+def remove_bike(bikes):
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
     for bike in bikes:
         if bike.serial_number == bike_serial_number:
-            if bike in user.bikes:
-                user.bikes.remove(bike)
-                bikes.remove(bike)
-                print("Bike removida com sucesso!")
-            else:
-                print("A bike não está associada a este usuário.")
+            bikes.remove(bike)
+            print("Bike removida com sucesso!")
             return
     print("Bike não encontrada!")
 
