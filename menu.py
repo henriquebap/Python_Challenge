@@ -12,7 +12,7 @@ while True:
     #Tratamento de execao 
     try:
         print("---"*40)
-        print("Olá, primeiro faça o login ou crie um usuario para continuar com o processo.")
+        print("Olá, Selecione uma opcao para executar uma ação.")
         Option = option()
     except ValueError:
         print("Opcai Invalida. Por favor, digite um numero valido.")
