@@ -11,6 +11,8 @@ users = []
 while True:
     #Tratamento de execao 
     try:
+        print("---"*40)
+        print("Olá, primeiro faça o login ou crie um usuario para continuar com o processo.")
         Option = option()
     except ValueError:
         print("Opcai Invalida. Por favor, digite um numero valido.")
@@ -40,10 +42,10 @@ while True:
                     remove_bike(bikes, user)
         else:
             print("Nao foi encontrado o usuario") #Se o ususario colocado na entrada nao estiver cadastrado ele retona uma mensagem
-            confirm = input("Gostaria de Criar um Usuario? (s/n)")
+            confirm = input("Gostaria de Criar um Usuario? (s/n): ")
             while confirm.lower() not in ["s", "n"]:
                 print("Por favor, digite 's' para Sim ou 'n' para Não.")
-                confirm = input("Gostaria de criar um usuário? (s/n)")
+                confirm = input("Gostaria de criar um usuário? (s/n): ")
             if confirm.lower() == "s": #Condicional se a entrada for "sim"
                 user = cadastro_user(users) #funcao cadastrar usuario
                 print("Usuário cadastrado com sucesso.")

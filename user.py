@@ -40,7 +40,7 @@ def remove_user(users): #remove o ususario, com a entrada pedindo email e senha 
     print("O usuário não foi encontrado.")
 
 def cadastro_user(users):
-    while True: #arumar o erro se eu colocar um espaco ele da um erro, nao queria que desse um erro somente colocando espaco. vou verificar o que e possivel de se fazer
+    while True:
         first_name = input("Digite seu primeiro nome: ").strip(" #@!$%^&*")
         if not first_name.isalpha():
             print("Por favor, digite apenas letras.")
@@ -63,6 +63,7 @@ def cadastro_user(users):
             continue
         else:
             cpf_formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+            cpf = cpf_formatado
             break
 
     while True:

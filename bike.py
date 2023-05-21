@@ -1,7 +1,5 @@
 #Importa o modulo "re"
 import re
-#modulo datetime
-from datetime import datetime
 #from user import cadastro_user
 #Classe bike que cria objeto Bike com todos os atributos de uma bike
 class Bike:
@@ -18,7 +16,7 @@ class Bike:
     #STR permite que o print(bike) retorne uma mensagem certa, mostrando os atributos de uma bike
     def __str__(self):
         modifications = "\n".join(self.additional_modifications) if self.additional_modifications else "Nenhuma modificação adicional"
-        return f"Marca: {self.brand}\nModelo: {self.bike_type.name}\nNum de Série: {self.serial_number}\nAno: {self.year}\nPreço: {self.value}\nModificações adicionais:\n{modifications}"
+        return f"Marca: {self.brand}\nModelo: {self.bike_type.name}\nNum de Série: {self.serial_number}\nAno: {self.year}\nPreço: {self.value}\nModificações adicionais:\n{modifications}\n"
 #Class bike Type define modelo de bike especifico com nome e descricao
 class BikeType(Bike):
     def __init__(self, name, description):
@@ -102,7 +100,7 @@ def edit_bikes(bikes):
     if bike is None:
         print("Bike nao encontrada!")
         return
-
+    # Cria um menu para o usuario escolher o que ele quer editar
     while True:
         print("---" * 40)
         print("O que voce deseja editar?")
@@ -111,7 +109,7 @@ def edit_bikes(bikes):
         print("3. Ano")
         print("4. Adicionar uma nova modificacao")
         print("0. Voltar ao bike menu")
-
+    #excecao de entrada
         try:
             choice = int(input("Digite o numero correspondente a opcao desejada: "))
         except ValueError:
@@ -121,7 +119,7 @@ def edit_bikes(bikes):
         if choice == 1:
             print(f'O nome da sua marca da sua bike atualmente e {bike.brand}')
             while True:
-                new_brand = input("Digite a nova marca: ")
+                new_brand = input("Digite a nova marca: ").capitalize()
                 if not new_brand.isalpha():
                     print("Por favor, digite o nome da marca com somente letras.")
                     continue
@@ -149,10 +147,10 @@ def edit_bikes(bikes):
             new_bike_year = int(new_bike_year)
             if new_bike_year > 2023:
                 print("Por favor, digite um ano valido ate 2023")
-                continue
-            bike.year = new_bike_year  # Adicione esta linha para atualizar o ano da bike
+                continue 
+            bike.year = new_bike_year
         elif choice == 4:
-            total_additional_modifications = 0  # Inicialize total_additional_modifications fora do loop while
+            total_additional_modifications = 0  #total_additional_modifications fora do loop while
             while True:
                 additional_modification = input("Digite uma modificação adicional para a bike (Deixe em branco para sair): ")
                 if additional_modification == "":
@@ -172,8 +170,8 @@ def remove_bike(bikes, user):
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
 
     found_bike = None
-    for index, bike in enumerate(bikes):
-        if bike.bike.serial_number == bike_serial_number and bike in user.bikes:
+    for bike in user.bikes:
+        if bike.serial_number == bike_serial_number:
             found_bike = bike
             break
 
@@ -181,13 +179,12 @@ def remove_bike(bikes, user):
         print("Bike não encontrada ou não pertence ao usuário.")
         return
 
-    bikes.pop(index)
     user.bikes.remove(found_bike)
 
     print("Bike removida com sucesso.")
 def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
         print("----"*10)
-        print(f"Ola {user.first_name} Aqui esta as suas bicicletas cadastradas")
+        print(f"Ola {user.first_name.capitalize()} aqui esta as suas bicicletas cadastradas")
         if len(user.bikes) == 0:
             print("Nenhuma bike cadastrada")
         else:
