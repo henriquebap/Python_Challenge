@@ -1,6 +1,6 @@
 #Importa o modulo "re"
 import re
-#import user
+from user_tools import User
 #from user import cadastro_user
 
 #Classe bike que cria objeto Bike com todos os atributos de uma bike
@@ -38,6 +38,10 @@ speed_bike_type = BikeType("Speed","Bike com pneu fino e que corre")
 bike_types = [mountain_bike_type, road_bike_type, bmx_bike_type, folding_bike_type, eletric_bike_type, speed_bike_type]
 bikes_list = []
 #funcao para cadastrar a bike em um user
+
+user = User
+
+
 def cad_bike(user):
     while True:
         bike_brand = input("Digite a marca da bike: ").strip(" #@!$%^&*")
@@ -191,7 +195,7 @@ def remove_bike(user):
     print("Bike removida com sucesso.")
 def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
         print("----"*10)
-        print(f"Ola {user.first_name.capitalize()} aqui esta as suas bicicletas cadastradas")
+        print(f"Ola {user.first_name()} aqui esta as suas bicicletas cadastradas")
         if len(user.bikes) == 0:
             print("Nenhuma bike cadastrada")
         else:

@@ -1,8 +1,12 @@
 import utilities
 import bike
-import user
+import user_tools
 import api_ia
+import json
 #User.users
+users = []
+bikes = []
+user = user_tools.User(first_name=None, last_name=None, cpf=None, email=None,password=None)
 
 class MenuItem:
     def __init__(self, description, action):
@@ -12,18 +16,20 @@ class MenuItem:
 class MainMenu:
     def __init__(self):
         #self.cadastro_realizado = False
-        self.users = []
-
+        users
         self.options = [
-            MenuItem("Realizar Login", lambda: user.login(self.users)),
+            MenuItem("Realizar Login", lambda: user_tools.login(users)),
             MenuItem("Iniciar processo da bike", lambda: self.open_submenu()),
-            MenuItem("Cadastrar Usuario", lambda: user.cadastro_user(self.users)),
-            MenuItem("Excluir conta", lambda: user.remove_user(self.users)),
+            MenuItem("Cadastrar Usuario", lambda: user_tools.cadastro_user(users)),
+            MenuItem("Mostrar perfil", lambda: user_tools.carregar_user(users)),
+            MenuItem("Excluir conta", lambda: user_tools.remove_user(users)),
             MenuItem("Sair", None)
 
         ]
 
         self.submenu = BikeMenu()
+
+    new_user = lambda: user_tools.cadastro_user(users)
 
     def open_submenu(self):
         #if self.cadastro_realizado:
@@ -36,6 +42,8 @@ class MainMenu:
      #   user.cadastro_user(self.users)
       #  self.cadastro_realizado = True
        # print("Cadastro realizado com sucesso! ") 
+    #def login(self):
+     #   self.logged_in_user = user_tools.login(users)
 
     def show_options(self):
         for index, option in enumerate(self.options, 1):
@@ -61,16 +69,16 @@ class MainMenu:
             selected_option.action()
         input("Pressione enter para continuar...")
 
-class BikeMenu:
-    def __init__(self):
-        self.user = "Usuario padrao"
-        self.bikes = []
 
+class BikeMenu():
+    def __init__(self):
+        user
+        bikes
         self.options = [
-            MenuItem("Bike Menu - Cadastrar uma Bike", lambda user=self.user: bike.cad_bike(user)),
-            MenuItem("Bike Menu - Editar uma Bike", lambda bikes=self.bikes: bike.edit_bikes(bikes)),
-            MenuItem("Bike Menu - Remover uma Bike criada", lambda user=self.user: bike.remove_bike(user)),
-            MenuItem("Bike Menu - Listar Bikes cadastradas", lambda user=self.user: bike.list_user_bike(user)),
+            MenuItem("Bike Menu - Cadastrar uma Bike",lambda: bike.cad_bike(user)),
+            MenuItem("Bike Menu - Editar uma Bike", lambda: bike.edit_bikes(bikes)),
+            MenuItem("Bike Menu - Remover uma Bike criada", lambda: bike.remove_bike(user)),
+            MenuItem("Bike Menu - Listar Bikes cadastradas", lambda: bike.list_user_bike(user)),
             MenuItem("Bike Menu - Enviar Imagens da bike", api_ia.cv_api),
             MenuItem("ENTER - para voltar ao menu principal", None)
         ]
@@ -78,7 +86,6 @@ class BikeMenu:
     def show_options(self):
         for index, option in enumerate(self.options, 1):
             print(f"{index} - {option.description}")
-
 
     def user_input(self):
         while True:
