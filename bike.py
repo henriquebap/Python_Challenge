@@ -1,6 +1,8 @@
 #Importa o modulo "re"
 import re
+#import user
 #from user import cadastro_user
+
 #Classe bike que cria objeto Bike com todos os atributos de uma bike
 class Bike:
     def __init__(self, brand, bike_type, serial_number, year, value, additional_modifications):
@@ -11,8 +13,11 @@ class Bike:
         self.value = value
         self.additional_modifications = additional_modifications or []
 
-    bikes =[]
+        
 
+    #def get_lista(self):
+      #  return self.bikes
+    
     #STR permite que o print(bike) retorne uma mensagem certa, mostrando os atributos de uma bike
     def __str__(self):
         modifications = "\n".join(self.additional_modifications) if self.additional_modifications else "Nenhuma modificação adicional"
@@ -31,7 +36,7 @@ eletric_bike_type = BikeType("Bike eletrica","Bike com motorzinho eletrico")
 speed_bike_type = BikeType("Speed","Bike com pneu fino e que corre")
 #Criando uma lista de bike_types
 bike_types = [mountain_bike_type, road_bike_type, bmx_bike_type, folding_bike_type, eletric_bike_type, speed_bike_type]
-
+bikes_list = []
 #funcao para cadastrar a bike em um user
 def cad_bike(user):
     while True:
@@ -84,9 +89,11 @@ def cad_bike(user):
             print("Por favor, digite um valor numerico valido")
 
     bike = Bike(bike_brand, bike_type, bike_id, bike_year, bike_value, additional_modifications=0) #Depois de todas as entradas ele atribui a Bike cada valor
-    user.bikes.append(bike) #Adiciona essa bike em user
+    user.bikes.append(bike) # Adiciona essa bike em user
     print("Bike Cadastrada com sucesso") 
     return user
+
+#new_bike = cad_bike(user.user_instace)
 #Funcao de editar as bikes 
 def edit_bikes(bikes):
     bike_serial_number = input("Digite o ID da bike que deseja editar: ")
@@ -166,7 +173,7 @@ def edit_bikes(bikes):
             bike.value += total_additional_modifications
         elif choice == 0:
             return
-def remove_bike(bikes, user):
+def remove_bike(user):
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
 
     found_bike = None
@@ -197,5 +204,3 @@ def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
                 print("Preco:",bike.value)
                 print("Modificacoes:", bike.additional_modifications)
                 print("----"*10)
-
-

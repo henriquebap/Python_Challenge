@@ -10,15 +10,15 @@ class User:
         self.password = password
         self.bikes = []
 
-#criando lista de users
-    users = []
-
 #funcao hash_password para salvar a password + hash
     def hash_password(self):
         self.password = bcrypt.hash(self.password)
 #funcao de verificacao da senha usando bcrypt
     def verify_password(self, password):
         return bcrypt.verify(password, self.password)
+    
+#user_instace = User()
+
 #funcao que apos criar o user ele consegue fazer o login validando o email e a senha criada do ususario
 def login(users):
     id_mail = input("Digite o seu email: ").lower()
@@ -84,6 +84,13 @@ def cadastro_user(users):
 
         user = User(first_name, last_name, cpf, email, id_password)
         user.hash_password()
+        #users = []
         users.append(user)
         print("Usuário cadastrado com sucesso.")
         return user
+    
+# Cria uma lista vazia para armazenar os usuários
+#lista_de_usuarios = []
+
+# Exemplo de uso da função de cadastro
+#novo_usuario = cadastro_user(lista_de_usuarios)

@@ -1,63 +1,101 @@
-#Imports necessary imports
-from option import option, opt_bike
-from user import login, remove_user, cadastro_user
-from bike import cad_bike, edit_bikes, remove_bike, list_user_bike
+import utilities
+import bike
+import user
+import api_ia
+#User.users
 
-#improve all of these dictionarys
-bikes =[]
-users = []
+class MenuItem:
+    def __init__(self, description, action):
+        self.description = description
+        self.action = action
 
-#While True para ficar em loop 
-while True:
-    #Tratamento de execao 
-    try:
-        print("---"*40)
-        print("Olá, Selecione uma opcao para executar uma ação.")
-        Option = option()
-    except ValueError:
-        print("Opcai Invalida. Por favor, digite um numero valido.")
-        continue
-    #Funcao da primeira opcao de input
-    if Option == 1:
-        user = login(users)
-        if user:
-            print(f"Seja Bem-vindo {user.first_name}, vamos continuar com o seu processo")
-            #Entra no laco de Opcao bike, funcoes direcionadas a bike
-            while True:
-                inp_bike = opt_bike()
-                if inp_bike == 0: 
-                    break
-                if inp_bike == 1:
-                    bike = cad_bike(user) #Cria uma bike
-                    bikes.append(bike)
-                #elif inp_bike == 2:
-                 #   pass
-                    #bike = survey_bike(bikes)
-                    #bike_img.append(bike)
-                elif inp_bike == 2:
-                    list_user_bike(user)#Mostra bikes atreladas ao perfil logado
-                elif inp_bike == 3:
-                    edit_bikes(user.bikes)#Modifica entradas que foram digitadas errado e adiciona itens (modificacoes + valor da modificao)
-                elif inp_bike == 4:#Remove a bike do perfil do ususario
-                    remove_bike(bikes, user)
-        else:
-            print("Nao foi encontrado o usuario") #Se o ususario colocado na entrada nao estiver cadastrado ele retona uma mensagem
-            confirm = input("Gostaria de Criar um Usuario? (s/n): ")
-            while confirm.lower() not in ["s", "n"]:
-                print("Por favor, digite 's' para Sim ou 'n' para Não.")
-                confirm = input("Gostaria de criar um usuário? (s/n): ")
-            if confirm.lower() == "s": #Condicional se a entrada for "sim"
-                user = cadastro_user(users) #funcao cadastrar usuario
-                print("Usuário cadastrado com sucesso.")
-                users.append(user)
-            else:
-                continue
-    elif Option == 2: #Input 2 chama a funcao cadastro dentro dessa condicao
-        user = cadastro_user(users)
-        users.append(user) #atrela user dentro da lista users
-    elif Option == 3: 
-        remove_user(users) #condicao do input 3 chama a funcao remover usuario 
-    elif Option == 0:
-        break #Condicao do input 0 finaliza o programa
-    else:
-        print("Digite um numero funcional")
+class MainMenu:
+    def __init__(self):
+        #self.cadastro_realizado = False
+        self.users = []
+
+        self.options = [
+            MenuItem("Realizar Login", lambda: user.login(self.users)),
+            MenuItem("Iniciar processo da bike", lambda: self.open_submenu()),
+            MenuItem("Cadastrar Usuario", lambda: user.cadastro_user(self.users)),
+            MenuItem("Excluir conta", lambda: user.remove_user(self.users)),
+            MenuItem("Sair", None)
+
+        ]
+
+        self.submenu = BikeMenu()
+
+    def open_submenu(self):
+        #if self.cadastro_realizado:
+        self.submenu.show_options()
+        self.submenu.user_input()
+        #else:
+            #print("Voce deve realizar o cadastro primeiro.")
+
+    #def cadastro_usuario(self):
+     #   user.cadastro_user(self.users)
+      #  self.cadastro_realizado = True
+       # print("Cadastro realizado com sucesso! ") 
+
+    def show_options(self):
+        for index, option in enumerate(self.options, 1):
+            print(f"{index} - {option.description}")
+
+    def user_input(self):
+        while True:
+            print("---"*40)
+            print("Olá, Selecione uma opcao para executar uma ação.")
+            option = input("Digite a opção que deseja: ")
+            option = utilities.get_int(option)
+            if option:
+                break
+            print("Informe um numero inteiro")
+
+        if option > len(self.options):
+            print("Selecione uma opcao valida")
+            print("")
+            return
+        
+        selected_option = self.options[option - 1]
+        if selected_option.action:
+            selected_option.action()
+        input("Pressione enter para continuar...")
+
+class BikeMenu:
+    def __init__(self):
+        self.user = "Usuario padrao"
+        self.bikes = []
+
+        self.options = [
+            MenuItem("Bike Menu - Cadastrar uma Bike", lambda user=self.user: bike.cad_bike(user)),
+            MenuItem("Bike Menu - Editar uma Bike", lambda bikes=self.bikes: bike.edit_bikes(bikes)),
+            MenuItem("Bike Menu - Remover uma Bike criada", lambda user=self.user: bike.remove_bike(user)),
+            MenuItem("Bike Menu - Listar Bikes cadastradas", lambda user=self.user: bike.list_user_bike(user)),
+            MenuItem("Bike Menu - Enviar Imagens da bike", api_ia.cv_api),
+            MenuItem("ENTER - para voltar ao menu principal", None)
+        ]
+
+    def show_options(self):
+        for index, option in enumerate(self.options, 1):
+            print(f"{index} - {option.description}")
+
+
+    def user_input(self):
+        while True:
+            print("---"*40)
+            print("Olá, Selecione uma opcao para executar uma ação.")
+            option = input("Digite a opção que deseja: ")
+            option = utilities.get_int(option)
+            if option:
+                break
+            print("Informe um numero inteiro")
+
+        if option > len(self.options):
+            print("Selecione uma opcao valida")
+            print("")
+            return
+        
+        selected_option = self.options[option - 1]
+        if selected_option.action:
+            selected_option.action()
+        input("Pressione enter para continuar...")
