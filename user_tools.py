@@ -1,39 +1,36 @@
 import re
 import json
 import os
-from passlib.hash import bcrypt #importando a biblioteca passlib usando o hash para verificar a senha
+from user import User
+from app_state import AppState
 #Criando class user e passando todos os atributos que um user tem
-class User:
-    def __init__(self, first_name, last_name, cpf, email, password):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.cpf = cpf
-        self.email = email
-        self.password = password
-        self.bikes = []
-
-    def to_dict(self):
-        return {
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "cpf": self.cpf,
-            "email": self.email,
-            "password": self.password,
-            "bikes": [str(bike) for bike in self.bikes]
-        }
 
 
-#funcao hash_password para salvar a password + hash
-    def hash_password(self):
-        self.password = bcrypt.hash(self.password)
-#funcao de verificacao da senha usando bcrypt
-    def verify_password(self, password):
-        return bcrypt.verify(password, self.password)
-    
-#user_instace = User()
+def load_user(database_folder="users_json"):
+    users = []
+    database_folder = "users_json"
+    if not os.path.exists(database_folder):
+        os.makedirs(database_folder)
+    for json_file in os.listdir(database_folder):
+        if json_file.endswith(".json"):
+            json_file_path = os.path.join(database_folder, json_file)
+            with open(json_file_path, "r") as json_file:
+                user_data = json.load(json_file)
+                user = User(
+                    user_data["first_name"],
+                    user_data["last_name"],
+                    user_data["cpf"],
+                    user_data["email"],
+                    user_data["password"]
+                )
+                users.append(user)
+
+    return users
 
 #funcao que apos criar o user ele consegue fazer o login validando o email e a senha criada do ususario
-def login(users):
+def login(app_state):
+    users = app_state.users
+
     if not users:
         print("Nao existe nenhum usuario cadastrado")
         return
@@ -45,7 +42,9 @@ def login(users):
     print("A senha ou email estao incorretos")
     return None
 
-def remove_user(users): #remove o ususario, com a entrada pedindo email e senha para excluir o usuario
+def remove_user(app_state): #remove o ususario, com a entrada pedindo email e senha para excluir o usuario
+    users = app_state.users
+
     email = input("Digite o email do usuário a ser removido: ").lower()
     id_password = input("Digite a Senha do usuario: ")
     for user in users:
@@ -56,6 +55,7 @@ def remove_user(users): #remove o ususario, com a entrada pedindo email e senha 
     print("O usuário não foi encontrado.")
 
 def cadastro_user(users):
+
     while True:
         first_name = input("Digite seu primeiro nome: ").strip(" #@!$%^&*")
         if not first_name.isalpha():
@@ -116,12 +116,12 @@ def cadastro_user(users):
         users.append(user)
 
 
-        output_folder = "users_json"
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
+        database_folder = "users_json"
+        if not os.path.exists(database_folder):
+            os.makedirs(database_folder)
 
 
-        json_file_path = os.path.join(output_folder, f"{user.cpf}.json")
+        json_file_path = os.path.join(database_folder, f"{user.cpf}.json")
 
         # Create the folder if it doesn't exist
         if not os.path.exists(json_file_path):
@@ -133,7 +133,9 @@ def cadastro_user(users):
 
         return user
     
-def carregar_user(users):
+def carregar_user(app_state):
+    users = app_state.users
+
     if not users:
         print("Nenhum usuario cadastrado")
         return

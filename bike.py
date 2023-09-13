@@ -5,15 +5,14 @@ from user_tools import User
 
 #Classe bike que cria objeto Bike com todos os atributos de uma bike
 class Bike:
-    def __init__(self, brand, bike_type, serial_number, year, value, additional_modifications):
+    def __init__(self,user, brand, bike_type, serial_number, year, value, additional_modifications):
+        self.user = user
         self.brand = brand
         self.bike_type = bike_type
         self.serial_number = serial_number
         self.year = year
         self.value = value
         self.additional_modifications = additional_modifications or []
-
-        
 
     #def get_lista(self):
       #  return self.bikes
@@ -42,7 +41,8 @@ bikes_list = []
 user = User
 
 
-def cad_bike(user):
+def cad_bike(app_state):
+    
     while True:
         bike_brand = input("Digite a marca da bike: ").strip(" #@!$%^&*")
         if not bike_brand.isalpha(): #validacao se a entrada foi de String
@@ -92,6 +92,7 @@ def cad_bike(user):
         except ValueError: #Valida se a entrada e um numero e senao for retorna um value error
             print("Por favor, digite um valor numerico valido")
 
+    user = app_state.current_user
     bike = Bike(bike_brand, bike_type, bike_id, bike_year, bike_value, additional_modifications=0) #Depois de todas as entradas ele atribui a Bike cada valor
     user.bikes.append(bike) # Adiciona essa bike em user
     print("Bike Cadastrada com sucesso") 
@@ -99,7 +100,8 @@ def cad_bike(user):
 
 #new_bike = cad_bike(user.user_instace)
 #Funcao de editar as bikes 
-def edit_bikes(bikes):
+def edit_bikes(app_state):
+    bikes = app_state.bikes
     bike_serial_number = input("Digite o ID da bike que deseja editar: ")
     bike = None  # Inicialize a variável bike fora do loop for
     for b in bikes:
@@ -177,7 +179,10 @@ def edit_bikes(bikes):
             bike.value += total_additional_modifications
         elif choice == 0:
             return
-def remove_bike(user):
+        
+def remove_bike(app_state):
+    user = app_state.user
+
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
 
     found_bike = None
@@ -193,18 +198,19 @@ def remove_bike(user):
     user.bikes.remove(found_bike)
 
     print("Bike removida com sucesso.")
-def list_user_bike(user): #Mostra o usuario e as suas bikes salvas
-        print("----"*10)
-        print(f"Ola {user.first_name()} aqui esta as suas bicicletas cadastradas")
-        if len(user.bikes) == 0:
-            print("Nenhuma bike cadastrada")
-        else:
-            for bike in user.bikes:
-                print("----"*10)
-                print("Marca:",bike.brand)
-                print("Modelo:",bike.bike_type.name)
-                print("Num de Serie:",bike.serial_number)
-                print("Ano:",bike.year)
-                print("Preco:",bike.value)
-                print("Modificacoes:", bike.additional_modifications)
-                print("----"*10)
+def list_user_bike(app_state): #Mostra o usuario e as suas bikes salvas
+    user = app_state.user
+    print("----"*10)
+    print(f"Ola aqui esta as suas bicicletas cadastradas")
+    if len(user.bikes) == 0:
+        print("Nenhuma bike cadastrada")
+    else:
+        for bike in user.bikes:
+            print("----"*10)
+            print("Marca:",bike.brand)
+            print("Modelo:",bike.bike_type.name)
+            print("Num de Serie:",bike.serial_number)
+            print("Ano:",bike.year)
+            print("Preco:",bike.value)
+            print("Modificacoes:", bike.additional_modifications)
+            print("----"*10)
