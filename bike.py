@@ -1,31 +1,9 @@
 #Importa o modulo "re"
 import re
-from user_tools import User
-#from user import cadastro_user
+from models import User
+from models import Bike, BikeType
+import json, os
 
-#Classe bike que cria objeto Bike com todos os atributos de uma bike
-class Bike:
-    def __init__(self,user, brand, bike_type, serial_number, year, value, additional_modifications):
-        self.user = user
-        self.brand = brand
-        self.bike_type = bike_type
-        self.serial_number = serial_number
-        self.year = year
-        self.value = value
-        self.additional_modifications = additional_modifications or []
-
-    #def get_lista(self):
-      #  return self.bikes
-    
-    #STR permite que o print(bike) retorne uma mensagem certa, mostrando os atributos de uma bike
-    def __str__(self):
-        modifications = "\n".join(self.additional_modifications) if self.additional_modifications else "Nenhuma modificação adicional"
-        return f"Marca: {self.brand}\nModelo: {self.bike_type.name}\nNum de Série: {self.serial_number}\nAno: {self.year}\nPreço: {self.value}\nModificações adicionais:\n{modifications}\n"
-#Class bike Type define modelo de bike especifico com nome e descricao
-class BikeType(Bike):
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
 #Criando e instanciando modelos de bikes atribuindo a classe bikeType
 mountain_bike_type = BikeType("Mountain Bike","Feita para off-road")
 road_bike_type = BikeType("Street","Bike feita para andar nas ruas")
@@ -93,8 +71,13 @@ def cad_bike(app_state):
             print("Por favor, digite um valor numerico valido")
 
     user = app_state.current_user
-    bike = Bike(bike_brand, bike_type, bike_id, bike_year, bike_value, additional_modifications=0) #Depois de todas as entradas ele atribui a Bike cada valor
-    user.bikes.append(bike) # Adiciona essa bike em user
+    bike = Bike(user,bike_brand, bike_type, bike_id, bike_year, bike_value, additional_modifications=0) #Depois de todas as entradas ele atribui a Bike cada valor
+    user.bikes.append(bike)
+
+    json_file_path = os.path.join("users_json", f"{user.cpf}.json")
+    with open(json_file_path, "w") as arquivo_json:
+        json.dump(user.to_dict(), arquivo_json)
+     # Adiciona essa bike em user
     print("Bike Cadastrada com sucesso") 
     return user
 
@@ -103,7 +86,8 @@ def cad_bike(app_state):
 def edit_bikes(app_state):
     bikes = app_state.bikes
     bike_serial_number = input("Digite o ID da bike que deseja editar: ")
-    bike = None  # Inicialize a variável bike fora do loop for
+    bike = None  # Inicialize a variável bike com None
+
     for b in bikes:
         if b.serial_number == bike_serial_number:
             bike = b
@@ -181,7 +165,7 @@ def edit_bikes(app_state):
             return
         
 def remove_bike(app_state):
-    user = app_state.user
+    user = app_state.current_user
 
     bike_serial_number = input("Digite o ID da bike que deseja remover: ")
 
@@ -199,9 +183,9 @@ def remove_bike(app_state):
 
     print("Bike removida com sucesso.")
 def list_user_bike(app_state): #Mostra o usuario e as suas bikes salvas
-    user = app_state.user
+    user = app_state.current_user
     print("----"*10)
-    print(f"Ola aqui esta as suas bicicletas cadastradas")
+    print(f"Ola {user.first_name} aqui esta as suas bicicletas cadastradas")
     if len(user.bikes) == 0:
         print("Nenhuma bike cadastrada")
     else:

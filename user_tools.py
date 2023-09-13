@@ -1,8 +1,9 @@
 import re
 import json
 import os
-from user import User
+from models import User
 from app_state import AppState
+from models import Bike
 #Criando class user e passando todos os atributos que um user tem
 
 
@@ -156,52 +157,72 @@ def cadastro_user(users):
     
 def carregar_user(app_state):
     users = app_state.users
+    bikes = app_state.bikes
 
     if not users:
         print("Nenhum usuario cadastrado")
         return
-    cpf = input("Digite o seu CPF: ").strip(" #@!$%^&*")
-    id_password = input("Digite a Senha do usuario: ")
-    if not cpf.isdigit() or len(cpf) != 11:
-        print("CPF inválido. Verifique a quantidade de dígitos.")
-    else:
+    
+    while True:
+        cpf = input("Digite o seu CPF: ").strip(" #@!$%^&*")
+        id_password = input("Digite a Senha do usuario: ")
+        if not cpf.isdigit() or len(cpf) != 11:
+            print("CPF inválido. Verifique a quantidade de dígitos.")
+            continue
         cpf_formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
         cpf = cpf_formatado
-    for user in users:
-        if user.verify_password(id_password):
-            try:
-                # Tente carregar os dados do usuário a partir do arquivo JSON
-                json_file_path = os.path.join("users_json", f"{cpf_formatado}.json")
+        for user in users:
+            if user.verify_password(id_password):
+                try:
+                    # Tente carregar os dados do usuário a partir do arquivo JSON
+                    json_file_path = os.path.join("users_json", f"{cpf_formatado}.json")
 
-                with open(json_file_path, "r") as arquivo_json:
-                    dados_usuario = json.load(arquivo_json)
+                    with open(json_file_path, "r") as arquivo_json:
+                        dados_usuario = json.load(arquivo_json)
 
-                # Crie um objeto User a partir dos dados carregados
-                user = User(
-                    dados_usuario["first_name"],
-                    dados_usuario["last_name"],
-                    dados_usuario["cpf"],
-                    dados_usuario["email"],
-                    dados_usuario["password"]
-                )
-                
-                # Carregue as bicicletas do usuário
-                #for bike_info in dados_usuario["bikes"]:
-                    # Aqui, você pode criar objetos Bike com as informações da lista bikes
-                    # ...
+                    # Crie um objeto User a partir dos dados carregados
+                    user = User(
+                        dados_usuario["first_name"],
+                        dados_usuario["last_name"],
+                        dados_usuario["cpf"],
+                        dados_usuario["email"],
+                        dados_usuario["password"]
+                    )
+                    
+                    # Carregue as bicicletas do usuário
+                    for bike_info in dados_usuario["bikes"]:
 
-                    #return user
-
-
-                print("Informações do usuário carregado:")
-                print(f"Nome: {user.first_name} {user.last_name}")
-                print(f"CPF: {user.cpf}")
-                print(f"Email: {user.email}")
-                print(f"Bikes: {user.bikes}")
-
-                return user
+                        bike = Bike(
+                            user=user,
+                            brand=bike_info["brand"],
+                            bike_type=bike_info["bike_type"],
+                            serial_number=bike_info["serial_number"],
+                            year=bike_info["year"],
+                            value=bike_info["value"],
+                            additional_modifications=bike_info.get("additional_modifications", [])
+                        )
+                        user.bikes.append(bike)
 
 
-            except FileNotFoundError:
-                print(f"Arquivo JSON para o usuário {cpf_formatado} não encontrado.")
-                return None
+                    print("Informações do usuário carregado:")
+                    print(f"Nome: {user.first_name} {user.last_name}")
+                    print(f"CPF: {user.cpf}")
+                    print(f"Email: {user.email}")
+                    print(f"Bikes: {user.bikes}")
+                    for bike in user.bikes:
+                        print(f"Marca: {bike.brand}")
+                        print(f"Tipo: {bike.bike_type}")
+                        print(f"Número de Série: {bike.serial_number}")
+                        print(f"Ano: {bike.year}")
+                        print(f"Valor: {bike.value}")
+                        print(f"Modificações Adicionais: {', '.join(bike.additional_modifications)}")
+
+                    return user
+
+
+                except FileNotFoundError:
+                    print(f"Arquivo JSON para o usuário {cpf_formatado} não encontrado.")
+                    return None
+        break
+
+    
