@@ -40,6 +40,7 @@ class MainMenu:
 
     def remove_user(self):
         user_tools.remove_user(self.app_state)
+        
 
     def open_submenu(self):
         self.submenu.show_options()

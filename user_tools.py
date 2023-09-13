@@ -45,14 +45,35 @@ def login(app_state):
 def remove_user(app_state): #remove o ususario, com a entrada pedindo email e senha para excluir o usuario
     users = app_state.users
 
-    email = input("Digite o email do usuário a ser removido: ").lower()
+    cpf = input("Digite o seu CPF: ").strip(" #@!$%^&*")
+    if not cpf.isdigit() or len(cpf) != 11:
+        print("CPF inválido. Verifique a quantidade de dígitos.")
+        
+        
+    cpf_formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    cpf = cpf_formatado
     id_password = input("Digite a Senha do usuario: ")
+    user_to_remove = None
+
     for user in users:
-        if user.email == email and user.verify_password(id_password):
-            users.remove(user)
-            print("Usuário removido com sucesso.")
-            return
-    print("O usuário não foi encontrado.")
+        if user.verify_password(id_password):
+            user_to_remove = user
+
+            if user_to_remove:
+                users.remove(user_to_remove)
+                print("Usuário removido com sucesso.")
+
+                # Formate o CPF novamente para ser usado como nome de arquivo
+                cpf_formatado = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+                json_file_path = f"users_json/{cpf}.json"
+
+                if os.path.exists(json_file_path):
+                    os.remove(json_file_path)
+                    print(f"Arquivo JSON {cpf_formatado}.json excluído.")
+            else:
+                print("O usuário não foi encontrado.")
+
+        
 
 def cadastro_user(users):
 
