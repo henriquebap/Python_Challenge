@@ -1,0 +1,4 @@
+passlib==1.7.4
+roboflow==1.1.4
+SQLAlchemy==1.4.39
+SQLAlchemy==2.0.21
