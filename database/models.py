@@ -52,3 +52,33 @@ class Bike(Base):
 
     user = relationship("User", back_populates="bikes")
     bike_type = relationship("BikeType", back_populates="bikes")
+    api_results = relationship("PredictionResult", back_populates="bike")
+
+
+class PredictionResult(Base):
+    __tablename__ = "API_RESULTS"
+
+    id = Column(Integer, primary_key=True, index=True)
+    image_path = Column(String, nullable=False)  # Caminho da imagem original
+    prediction_image_path = Column(
+        String, nullable=False
+    )  # Caminho da imagem de predição
+    predicted_class = Column(String, nullable=True)  # Classe prevista pela API
+    confidence = Column(Integer, nullable=True)  # Confiança da predição
+    additional_info = Column(Text, nullable=True)  # Outras informações da predição
+    bike_id = Column(Integer, ForeignKey("bike.id"), nullable=False)
+    bike = relationship("Bike", back_populates="api_results")
+
+    def __init__(
+        self,
+        image_path,
+        prediction_image_path,
+        predicted_class,
+        confidence,
+        additional_info,
+    ):
+        self.image_path = image_path
+        self.prediction_image_path = prediction_image_path
+        self.predicted_class = predicted_class
+        self.confidence = confidence
+        self.additional_info = additional_info
