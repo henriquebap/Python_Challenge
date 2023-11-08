@@ -1,9 +1,7 @@
 from database import SessionLocal, models
-from sqlalchemy.orm import joinedload
-from database import models
 
 
-def create_user(user_data: dict):
+def create_user(user_data):
     db = SessionLocal()
     try:
         user = models.User(user_data)
@@ -18,7 +16,6 @@ def create_user(user_data: dict):
 
 def read_user(user_id: int):
     db = SessionLocal()
-
     try:
         return db.query(models.User).filter(models.User.user_id == user_id).first()
     finally:
@@ -28,23 +25,27 @@ def read_user(user_id: int):
 def update_user(user_id: int, user_data: dict):
     db = SessionLocal()
     try:
-        db.query(models.User).filter(models.User.user_id == user_id).update(user_data)
-        db.commit()
+        user = db.query(models.User).filter(models.User.user_id == user_id).first()
+        if user:
+            for key, value in user_data.items():
+                setattr(user, key, value)
+            db.commit()
+            db.refresh(user)
+        return user
     finally:
         db.close()
-    return read_user(db, user_id)
 
 
 def delete_user(user_id: int):
     db = SessionLocal()
     try:
-        user = read_user(db, user_id)
+        user = db.query(models.User).filter(models.User.user_id == user_id).first()
         if user:
             db.delete(user)
             db.commit()
+        return user
     finally:
         db.close()
-    return user
 
 
 def read_user_by_cpf(cpf: str):
@@ -55,10 +56,10 @@ def read_user_by_cpf(cpf: str):
         db.close()
 
 
-def create_bike(user, bike_data):
+def create_bike(user_id, bike_data):
     db = SessionLocal()
     try:
-        new_bike = models.Bike(user=user, **bike_data)
+        new_bike = models.Bike(user_id=user_id, **bike_data)
         db.add(new_bike)
         db.commit()
         db.refresh(new_bike)
