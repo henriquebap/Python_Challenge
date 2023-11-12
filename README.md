@@ -1,9 +1,9 @@
 ## Integrantes do Grupo:
 
 - Henrique Baptista - RM 97796
-- Gabriel Amancio - RM
-- Pedro Pacheco - RM
-- Ricardo Brito - RM
+- Gabriel Amancio - RM 97936
+- Pedro Pacheco - RM 98043
+- Ricardo Brito - RM 98370
 
 ---
 
