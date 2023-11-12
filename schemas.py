@@ -1,25 +1,5 @@
 from pydantic import BaseModel
-from typing import List
-
-
-class BikeTypeBase(BaseModel):
-    name: str
-    description: str
-
-
-class BikeTypeCreate(BikeTypeBase):
-    pass
-
-
-class BikeType(BikeTypeBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-        from_attributes = True
-
-
-# bike type schema
+from typing import List, Union
 
 
 class UserBase(BaseModel):
@@ -44,9 +24,8 @@ class BikeBase(BaseModel):
     year: int
     value: int
     serial_number: str
-    owner: User
+    owner: Union[User, "UserCreate"]
     additional_modifications: str
-    biketype: BikeType
 
 
 class BikeCreate(BikeBase):
@@ -56,6 +35,3 @@ class BikeCreate(BikeBase):
 class Bike(BikeBase):
     id: int
     owner: User
-
-    class Config:
-        orm_mode = True

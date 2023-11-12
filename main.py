@@ -45,4 +45,32 @@ def delete_user(user_id: int):
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User successfully removed"}
 
-@app.post("/users/{user_id}/bikes/", status_code=201, response_model=schemas.)
+
+@app.post("/users/{user_id}/bikes/", status_code=201, response_model=schemas.Bike)
+def add_bike(user_id: int, bike: schemas.BikeCreate):
+    new_bike = crud.create_bike(user_id, bike)
+    return new_bike
+
+
+@app.get("/bikes/{bike_id}", response_model=schemas.Bike)
+def get_bike(bike_id: int):
+    bike = crud.read_bike(bike_id)
+    if not bike:
+        raise HTTPException(status_code=404, detail="Bike not found")
+    return bike
+
+
+@app.put("/bikes/{bike_id}", response_model=schemas.Bike)
+def update_bike(bike_id: int, bike: schemas.BikeCreate):
+    updated_bike = crud.update_bike(bike_id, bike)
+    if not updated_bike:
+        raise HTTPException(status_code=404, detail="Bike not found")
+    return updated_bike
+
+
+@app.delete("/bikes/{bike_id}", response_model=schemas.Bike)
+def remove_bike(bike_id: int):
+    deleted_bike = crud.delete_bike(bike_id)
+    if not deleted_bike:
+        raise HTTPException(status_code=404, detail="Bike not found")
+    return deleted_bike

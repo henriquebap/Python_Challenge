@@ -1,10 +1,16 @@
 from database import SessionLocal, models
+import schemas
 
 
-def create_user(user_data):
+def create_user(user: schemas.UserCreate):
     db = SessionLocal()
     try:
-        user = models.User(user_data)
+        db_user = models.User()
+        db_user.first_name = user.first_name
+        db_user.last_name = user.last_name
+        db_user.cpf = user.cpf
+        db_user.email = user.email
+        db_user.password = user.password
         db.add(user)
         db.commit()
         db.refresh(user)
