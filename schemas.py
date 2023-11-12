@@ -1,9 +1,29 @@
 from pydantic import BaseModel
-from typing import List, Union
+from typing import List
+from typing import Optional
+
+
+class BikeBase(BaseModel):
+    brand: str
+    serial_number: str
+    year: int
+    value: float
+    additional_modifications: str
+
+
+class BikeCreate(BikeBase):
+    pass
+
+
+class Bike(BikeBase):
+    id: int
+
+    class Config:
+        from_attributes = True
 
 
 class UserBase(BaseModel):
-    first_name: str
+    name: str
     last_name: str
     cpf: str
     email: str
@@ -15,23 +35,25 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    user_id: int
-    bikes: List["Bike"] = []
+    id: int
+
+    class Config:
+        from_attributes = True
 
 
-class BikeBase(BaseModel):
-    brand: str
-    year: int
-    value: int
-    serial_number: str
-    owner: Union[User, "UserCreate"]
-    additional_modifications: str
+class ImagePredictionBase(BaseModel):
+    image_path: str
+    prediction_image_path: str
+    predicted_class: Optional[str] = None
+    confidence: Optional[float] = None
 
 
-class BikeCreate(BikeBase):
+class ImagePredictionCreate(ImagePredictionBase):
     pass
 
 
-class Bike(BikeBase):
+class ImagePrediction(ImagePredictionBase):
     id: int
-    owner: User
+
+    class Config:
+        orm_mode = True

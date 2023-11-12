@@ -4,7 +4,7 @@ import shutil
 import time
 
 
-def cv_api(image_path):
+def cv_api(image_file):
     # Initialize the Roboflow object with your API key
     rf = Roboflow(api_key="fFzjCpFlDM2cN1D0XgOj")
 
@@ -21,7 +21,8 @@ def cv_api(image_path):
     original_image_path = os.path.join(output_folder, f"original_image_{timestamp}.jpg")
 
     # Copy the image to the "received_images" folder with the unique filename
-    shutil.copy2(image_path, original_image_path)
+    with open(original_image_path, "wb") as temp_file:
+        shutil.copyfileobj(image_file, temp_file)
 
     # Use the correct image path for prediction
     image_path = original_image_path
