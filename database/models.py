@@ -3,6 +3,7 @@ from database import Base
 from sqlalchemy.orm import relationship
 
 
+# Cria o modelo de Usuario, passando os valores
 class User(Base):
     __tablename__ = "USERS_BIKE5"
     id = Column(Integer, primary_key=True, index=True)
@@ -15,6 +16,7 @@ class User(Base):
     bikes = relationship("Bike", back_populates="user", foreign_keys="Bike.user_id")
 
 
+# Cria o modelo de bicicleta passando os valores
 class Bike(Base):
     __tablename__ = "BIKES_CH4"
     id = Column(Integer, primary_key=True, index=True)
@@ -29,6 +31,7 @@ class Bike(Base):
     image_predictions = relationship("ImagePrediction", back_populates="bike")
 
 
+# Cria um modelo para a imagem retornada da API
 class ImagePrediction(Base):
     __tablename__ = "IMAGE_PREDICTIONS"
 

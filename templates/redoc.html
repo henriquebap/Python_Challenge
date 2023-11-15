@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documentação da API</title>
+    <style>
+        /* Estilos CSS podem ser adicionados aqui para melhorar a aparência da documentação */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #666;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">Voltar para a página inicial</a>
+
+    <h1>Documentação da API</h1>
+
+    <h2>Endpoints Disponíveis:</h2>
+
+    <h3>Criar um novo usuário:</h3>
+    <ul>
+        <li><strong>Método:</strong> POST</li>
+        <li><strong>Path:</strong> /users</li>
+        <li><strong>Descrição:</strong> Área para criar um novo usuário. Se atente em colocar as entradas e informações corretas.</li>
+    </ul>
+
+    <h3>Ler usuário por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> GET</li>
+        <li><strong>Path:</strong> /users/{user_id}</li>
+        <li><strong>Descrição:</strong> Lê um usuário pelo ID.</li>
+    </ul>
+
+    <h3>Atualizar usuário por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> PUT</li>
+        <li><strong>Path:</strong> /users/{user_id}</li>
+        <li><strong>Descrição:</strong> Atualiza um usuário pelo ID.</li>
+    </ul>
+
+    <h3>Deletar usuário por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> DELETE</li>
+        <li><strong>Path:</strong> /users/{user_id}</li>
+        <li><strong>Descrição:</strong> Deleta um usuário pelo ID.</li>
+    </ul>
+
+    <h3>Criar bicicleta para um usuário:</h3>
+    <ul>
+        <li><strong>Método:</strong> POST</li>
+        <li><strong>Path:</strong> /users/{user_id}/bikes/</li>
+        <li><strong>Descrição:</strong> Cria uma bicicleta para um usuário específico.</li>
+    </ul>
+
+    <h3>Ler bicicleta por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> GET</li>
+        <li><strong>Path:</strong> /bikes/{bike_id}</li>
+        <li><strong>Descrição:</strong> Lê uma bicicleta pelo ID.</li>
+    </ul>
+
+    <h3>Atualizar bicicleta por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> PUT</li>
+        <li><strong>Path:</strong> /bikes/{bike_id}</li>
+        <li><strong>Descrição:</strong> Atualiza uma bicicleta pelo ID.</li>
+    </ul>
+
+    <h3>Deletar bicicleta por ID:</h3>
+    <ul>
+        <li><strong>Método:</strong> DELETE</li>
+        <li><strong>Path:</strong> /bikes/{bike_id}</li>
+        <li><strong>Descrição:</strong> Deleta uma bicicleta pelo ID.</li>
+    </ul>
+
+    <h3>Listar todas as bicicletas de um usuário:</h3>
+    <ul>
+        <li><strong>Método:</strong> GET</li>
+        <li><strong>Path:</strong> /users/{user_id}/bikes/</li>
+        <li><strong>Descrição:</strong> Lista todas as bicicletas de um usuário.</li>
+    </ul>
+
+    <h3>Listar todas as bicicletas:</h3>
+    <ul>
+        <li><strong>Método:</strong> GET</li>
+        <li><strong>Path:</strong> /bikes</li>
+        <li><strong>Descrição:</strong> Lista todas as bicicletas.</li>
+    </ul>
+
+    <h3>Prever uma imagem de bicicleta:</h3>
+    <ul>
+        <li><strong>Método:</strong> POST</li>
+        <li><strong>Path:</strong> /predict-bike-image</li>
+        <li><strong>Descrição:</strong> Criação de uma rota para prever uma imagem de bicicleta.</li>
+    </ul>
+</body>
+</html>

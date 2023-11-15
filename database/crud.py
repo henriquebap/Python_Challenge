@@ -5,6 +5,7 @@ import schemas
 from sqlalchemy.exc import IntegrityError
 
 
+# Cria o Usuario
 def create_user(user: schemas.UserCreate):
     db = SessionLocal()
     try:
@@ -17,6 +18,7 @@ def create_user(user: schemas.UserCreate):
         db.add(db_user)
         db.commit()
     except IntegrityError:
+        # retorna uma funcao de erro se houver algum usuario cadastrado
         raise HTTPException(status_code=400, detail="CPF or email already registered")
 
     finally:
@@ -25,6 +27,7 @@ def create_user(user: schemas.UserCreate):
     return db_user
 
 
+# le e retorna o usuario por ID
 def read_user(user_id: int):
     db = SessionLocal()
     try:
@@ -34,6 +37,7 @@ def read_user(user_id: int):
     return user
 
 
+# Atualiza os valores dados na craicao do usuario, podendo modificar
 def update_user(user_id: int, user: schemas.UserCreate):
     db = SessionLocal()
     try:
@@ -53,6 +57,7 @@ def update_user(user_id: int, user: schemas.UserCreate):
     return db_user
 
 
+# Deleta um usuario
 def delete_user(user_id: int):
     db = SessionLocal()
     try:
@@ -65,6 +70,7 @@ def delete_user(user_id: int):
         db.close()
 
 
+# Le e passa por todas as bicicletas cadastradas em cada usuario, verifica e valida por ID
 def read_all_bikes_from_user(user_id):
     db = SessionLocal()
     try:
@@ -74,6 +80,7 @@ def read_all_bikes_from_user(user_id):
         db.close()
 
 
+# Le o usuario e valida por cpf
 def read_user_by_cpf(cpf: str):
     db = SessionLocal()
     try:
@@ -84,6 +91,7 @@ def read_user_by_cpf(cpf: str):
     return db_user
 
 
+# Cria uma bicicleta
 def create_bike(user_id, bike: schemas.BikeCreate):
     db = SessionLocal()
     try:
@@ -104,6 +112,7 @@ def create_bike(user_id, bike: schemas.BikeCreate):
     return db_bike
 
 
+# Le e retorna todas as bicicletas criadas no banco de dados
 def read_all_bikes():
     db = SessionLocal()
     try:
@@ -113,18 +122,16 @@ def read_all_bikes():
     return artists
 
 
-# Função para ler uma bicicleta por número de série
+# le todas as bikes puxando por ID de bike
 def read_bike(bike_id: int):
     db = SessionLocal()
     try:
         bike = db.query(models.Bike).filter(models.Bike.id == bike_id).first()
         if bike:
-            # Exibir as informações da bicicleta
             print("Marca:", bike.brand)
             print("Modelo:", bike.serial_number)
             print("Ano:", bike.year)
             print("Valor:", bike.value)
-            # Exibir outras informações da bicicleta
             return bike
         else:
             print("Bicicleta não encontrada.")
@@ -155,7 +162,7 @@ def update_bike_in_db(user_id: int, bike_id: int, bike: schemas.BikeCreate):
         db.close()
 
 
-# Função para deletar uma bicicleta por número de série
+# Função para deletar uma bicicleta
 def delete_bike(bike_id):
     db = SessionLocal()
     try:
@@ -169,6 +176,7 @@ def delete_bike(bike_id):
         db.close()
 
 
+# Ele le a imagem e retorna em um dicionario, salvando assim no bd
 def create_image_prediction(prediction: schemas.ImagePredictionCreate):
     db = SessionLocal()
     try:
